@@ -1,0 +1,110 @@
+---
+title: "Homework rendered"
+author: "Xinqian Cai"
+date: "2021/9/9"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading pakages
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+## Loading tada
+```{r}
+data(txhousing)
+glimpse(txhousing)
+```
+
+## Question 1
+The last city listed in the data set is "Wichita Falls".
+
+## Question 2
+The "listings" variable menas total active listings in this data set.
+
+## Question 3
+```{r}
+txhousing <- txhousing  |>
+  select(city, year, month, sales, volume, median, listings, date)
+txhousing
+```
+## Questions 4
+```{r}
+dallas_sub <- txhousing |>
+  filter(city == "Dallas", (year == "2012" | year == "2013" ))
+View(dallas_sub)
+```
+
+## Question 5
+```{r}
+dallas_sub <- dallas_sub |>
+  mutate(prct_sold = (sales/listings * 100))
+```
+
+## Question 5
+```{r}
+dallas_summary <- dallas_sub |>
+  group_by(month) |>
+  summarise(mean_prct_sold = mean(prct_sold))
+dallas_summary
+```
+## Question 7 
+```{r}
+dallas_summary |>
+  arrange(desc(mean_prct_sold))
+```
+August has the greatest percentage of houses sold in Dallas on average from 2012-2013.
+
+## Question 8
+```{r}
+txhousing %>% 
+  filter(year == 2012 | year == 2013, city == "Dallas") %>%
+  mutate(prct_sold = sales/listings *100) %>%
+  group_by(month) %>%
+  summarize(mean_prct_sold = mean(prct_sold)) %>% 
+  arrange(desc(mean_prct_sold))
+```
+In this chunk, we first select the housing data that are from 2012 to 2013 in Dallas from the document "Housing Sales in Texas; then calculate the percentage of listings that were sold in Dallas from 2012 to 2013; then calculate the average of percentage of listings that were sold in Dallas from 2012 to 2013 in each month of the year; finally, arrange the average of percentage of listings that were sold in Dallas from 2012 to 2013 in each month of the year in a descending order.
+
+## Question 9
+```{r}
+fewest_listed_city <- txhousing |>
+  filter(year == 2015, month == 1) |>
+  select(city, listings) |>
+  arrange(listings)
+fewest_listed_city
+```
+In January of 2015, San Marcos had the fewest houses listed for sale.
+
+## Question 10
+```{r}
+fewest_sold_city <- txhousing |>
+  filter(year == 2012) |>
+  select(month, sales) |>
+  arrange(desc(sales))
+fewest_sold_city
+```
+In 2012, August had the most houses sold in Texas.
+
+## Question 11
+
+```{r}
+Austin_Dalla_year_sold <- txhousing |>
+  filter(year == "2000" | year == "2001") |>
+  filter(city == "Dallas" | city == "Austin") |>
+  group_by(city) |>
+  summarize(sum = sum(sales))
+Austin_Dalla_year_sold
+```
+
+
+
+
+
+
+
