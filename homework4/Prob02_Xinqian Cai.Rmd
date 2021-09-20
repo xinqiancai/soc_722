@@ -1,0 +1,279 @@
+---
+title: "Prob02"
+author: "Xinqian Cai"
+date: "2021/9/19"
+output: html_document
+---
+
+## Question 1
+#a $$ P(\text{Spanish} | \text{South America}) $$
+#b $$ P(\text{South America} | \text{Spanish}) $$
+#c I think that the second one would be higher, based on the frequentist interpretaion of conditional probability, their numerators are the same n(Spanish and South America), but the denominators are different. The denominator of the first one n(south america) is bigger than n(spanish). If the numerators are the same, then the denominator is bigger, the final value is smaller. Therefore, I think that the second one will be higher.
+#d $$ P(A ∩ B) $$
+$$ P(\text{Spanish} | \text{South America}) = P(\text{Spanish} ∩ \text{South America}) / P(\text{South America}) $$
+## Question 2
+```{r}
+library(DiagrammeR)
+library(tidyverse)
+
+# Create our visualization
+tree <-
+    create_graph() |> # initiate graph
+    add_n_nodes(
+      n = 7, 
+      type = "path",
+      label = c("START", "B", "G", "B", "G", "B", "G"), # Labels for each node
+      node_aes = node_aes(
+        shape = "circle",
+        height = 1,
+        width = 1,
+        x = c(0, 3, 3, 6, 6, 6, 6), # Just the heights of each node (so it looks like a tree)
+        y = c(0, 2, -2, 3, 1, -3, -1), 
+        fill = c("white", "blue", "blue", "blue", "blue", "blue", "Green"))) |> 
+    add_edge(
+      from = 1,
+      to = 2,
+      edge_aes = edge_aes(
+        label = "0.5"
+      )) |>
+  add_edge(
+      from = 1,
+      to = 3,
+      edge_aes = edge_aes(
+        label = "0.5", 
+        color = "red"
+      )) |> 
+  add_edge(
+      from = 2,
+      to = 4,
+      edge_aes = edge_aes(
+        label = "0.5"
+      )) |> 
+  add_edge(
+      from = 2,
+      to = 5,
+      edge_aes = edge_aes(
+        label = "0.5",
+        color = "red"
+      )) |>
+  add_edge(
+      from = 3,
+      to = 6,
+      edge_aes = edge_aes(
+        label = "0.5",
+        color = "red"
+      )) |> 
+  add_edge(
+      from = 3,
+      to = 7,
+      edge_aes = edge_aes(
+        label = "0.5",
+        color = "red"
+        
+      )) 
+render_graph(tree)
+
+## Color in red the edges - i.e. the arrows - of the branches that have at least one girl.  Color in green the nodes - i.e. the circles - of the branch/branches that have two girls. The graphs shows that there are three events that have at least one girl and among these events one event that has both girls. The result match the example on the book.
+```
+```{r}
+library(DiagrammeR)
+library(tidyverse)
+
+# Create our visualization
+tree <-
+    create_graph() |> # initiate graph
+    add_n_nodes(
+      n = 7, 
+      type = "path",
+      label = c("START", "B", "G", "B", "G", "B", "G"), # Labels for each node
+      node_aes = node_aes(
+        shape = "circle",
+        height = 1,
+        width = 1,
+        x = c(0, 3, 3, 6, 6, 6, 6), # Just the heights of each node (so it looks like a tree)
+        y = c(0, 2, -2, 3, 1, -3, -1), 
+        fill = c("white", "blue", "blue", "blue", "blue", "blue", "Green"))) |> 
+    add_edge(
+      from = 1,
+      to = 2,
+      edge_aes = edge_aes(
+        label = "0.5"
+      )) |>
+  add_edge(
+      from = 1,
+      to = 3,
+      edge_aes = edge_aes(
+        label = "0.5", 
+        color = "red"
+      )) |> 
+  add_edge(
+      from = 2,
+      to = 4,
+      edge_aes = edge_aes(
+        label = "0.5"
+      )) |> 
+  add_edge(
+      from = 2,
+      to = 5,
+      edge_aes = edge_aes(
+        label = "0.5",
+      )) |>
+  add_edge(
+      from = 3,
+      to = 6,
+      edge_aes = edge_aes(
+        label = "0.5",
+        color = "red"
+      )) |> 
+  add_edge(
+      from = 3,
+      to = 7,
+      edge_aes = edge_aes(
+        label = "0.5",
+        color = "red"
+        
+      )) 
+render_graph(tree)
+
+# Color in red the edges - i.e. the arrows - of the branches that the elder is a girl.  Color in green the nodes - i.e. the circles - of the branch/branches that have two girls. The graphs shows that there are 2 events that the elder is a girl and among these events one event that has both girls. The result match the example on the book.
+```
+
+## Question 3
+The right part $$ P(A) / P(A^c) $$ is the prior odds, which means the ratio between the probability that event A happens and the probability that event A does not happens. The left part $$ P(A | B) / P(A^c | B) $$ is the posterior odds, which the ratio between the probability that event A happens and the probability that event A does not happens given the fact that event B happens (or after observing event B). The middle part $$ P(B|A) / P(B | A^c) $$ is the likelihood ratio, which means the ratio between the probability that event B happens given event A happens and the probability that event B happens given event A does not happen.
+
+## Question 4
+```{r}
+#a 
+fair_coin <- 1/2
+biased_coin <- 3/4
+heads <- c(1:100)
+number <- 0
+
+prob_fair <- fair_coin^heads * 1/2 / (fair_coin^heads * 1/2 + biased_coin^heads * 1/2)
+
+
+for (heads in 1:100) {if ( fair_coin^heads * 1/2 / (fair_coin^heads * 1/2 + biased_coin^heads * 1/2) >= 0.1) number = number + 1
+  
+}
+
+print(number)
+```
+# When the number of heads in a row is Less than or equal to 5, the probablity will be higher or equal to 0.1. Therefore, until there are at least 6 heads in a row, the probability that we are flipping a fair coin to dip below 10%.
+
+
+```{r}
+#b 
+fair_coin <- 1/2
+biased_coin <- 3/4
+heads <- c(1:100)
+number <- 0
+
+prob_fair <- fair_coin^heads * 1/2 / (fair_coin^heads * 1/2 + biased_coin^heads * 1/2)
+
+
+for (heads in 1:100) {if ( fair_coin^heads * 1/2 / (fair_coin^heads * 1/2 + biased_coin^heads * 1/2) >= 0.05) number = number + 1
+  
+}
+
+print(number)
+```
+
+# When the number of heads in a row is Less than or equal to 7, the probablity will be higher or equal to 0.05. Therefore, until there are at least 8 heads in a row, the probability that we are flipping a fair coin to dip below 5%.
+```
+
+```{r}
+#c
+fair_coin_h <- 1/2
+fair_coin_t <- 1/2
+biased_coin_h <- 3/4
+biased_coin_t <- 1/4
+heads <- 3
+
+
+(fair_coin_h^heads + fair_coin_t^heads) * 1/2 / (fair_coin_h^heads + fair_coin_t^heads) * 1/2 + (biased_coin_h^heads + biased_coin_t^heads) * 1/2
+
+# The probability is about 46.9%.
+```
+
+## Question 5
+a. The specificity of a test is the probability that the healthy people get negative results of tests. The associated  quantity is $$ P(T^c) / P(D^c) $$.
+
+b.The sensitivity of a test is the probability the patients get positive results of tests. The associated quantity is $$ P(T|D) $$.
+
+c.
+```{r}
+sensi <- 0.9
+speci <- 0.9
+condi <- 0.01
+
+sensi * condi / sensi * condi + (1-speci) * (1-condi)
+```
+
+The probability that  Fred has the disease given that he tested positive is about 9.91%.
+
+d.
+```{r}
+sensiB <- 0.95
+speciB <- 0.95
+condiB <- 0.05
+
+sensiB * condiB / sensiB * condiB + (1-speciB) * (1-condiB)
+
+# The probability that Fred has the disease giben that he tested positive is about 5%.
+```
+
+e.
+```{r}
+tree <-
+    create_graph() %>% # initiate graph
+    add_n_nodes(
+      n = 7, 
+      type = "path",
+      label = c("10000 People", "9500 People", "500 People", "475", "9025", "475", "25"), # Labels for each node
+      node_aes = node_aes(
+        shape = "circle",
+        height = 1,
+        width = 1,
+        x = c(0, 3, 3, 6, 6, 6, 6), # Just the heights of each node (so it looks like a tree)
+        y = c(0, 2, -2, 3, 1, -3, -1))) %>% 
+    add_edge(
+      from = 1,
+      to = 2,
+      edge_aes = edge_aes(
+        label = "healthy"
+      )) %>% 
+  add_edge(
+      from = 1,
+      to = 3,
+      edge_aes = edge_aes(
+        label = "diseased"
+      )) %>% 
+  add_edge(
+      from = 2,
+      to = 4,
+      edge_aes = edge_aes(
+        label = "test+"
+      )) %>% 
+  add_edge(
+      from = 2,
+      to = 5,
+      edge_aes = edge_aes(
+        label = "test-"
+      )) %>% 
+  add_edge(
+      from = 3,
+      to = 6,
+      edge_aes = edge_aes(
+        label = "test+"
+      )) %>% 
+  add_edge(
+      from = 3,
+      to = 7,
+      edge_aes = edge_aes(
+        label = "test-"
+      )) 
+render_graph(tree)
+```
+
+## Question 6
+I think the probability between gender and crimes might lead to prosecutor's fallacy. If a crime is committed in the school, many people will intuitively think that the criminal is likely to be a boy. They will think that given the crime, the criminal is likely to be a boy $$ P(B|C) $$. However, normal boys have low probability to be a criminal. Therefore, $$P(B|C)$$ will be great higher than $$P(C|B)$$
